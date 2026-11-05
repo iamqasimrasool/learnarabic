@@ -95,6 +95,7 @@ const pUr=['میں','تم','تم','وہ','وہ','ہم','تم سب','وہ سب'];
 const wishPast=['يَا لَيْتِنِي','يَا لَيْتَك','يَا لَيْتِك','يَا لَيْتَه','يَا لَيْتَهَا','يَا لَيْتِنَا','يَا لَيْتَكُمْ','يَا لَيْتَهُمْ'];
 const notProgressive=['مَانِي','مَانْتَ','مَانْتِي','مَاهُو','مَاهِي','مَانَّا','مَانْتُوا','مَاهُمْ'];
 const canPastUr=['سکا','سکے','سکیں','سکا','سکی','سکے','سکے','سکے'];
+// Urdu respectful/plural agreement may differ by context; second-person feminine is expressed with «سکیں» in this set.
 const canNowUr=['سکتا ہوں','سکتے ہو','سکتی ہو','سکتا ہے','سکتی ہے','سکتے ہیں','سکتے ہو','سکتے ہیں'];
 const canFutureUr=['سکوں گا','سکو گے','سکو گی','سکے گا','سکے گی','سکیں گے','سکو گے','سکیں گے'];
 const wantUr=['چاہتا ہوں','چاہتے ہو','چاہتی ہو','چاہتا ہے','چاہتی ہے','چاہتے ہیں','چاہتے ہو','چاہتے ہیں'];
@@ -290,8 +291,13 @@ function auditExamples(){
   if(condition==='ابھی تک نہیں'&&tense==='future'&&voice==='active'&&(!entry.ar.includes(past[i])||!entry.ar.includes('لِلْحِين مَا')))issues.push('Future not-yet-completed agreement: '+i);
   if(condition==='خواہش'&&tense==='past'&&voice==='active'&&!entry.ar.startsWith(wishPast[i]+' '))issues.push('Past wish pronoun agreement: '+i);
   if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&!entry.ur.endsWith(wantUr[i]))issues.push('Desire Urdu agreement: '+i);
+  if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&(!entry.ar.includes(present[i])||entry.ar.includes(future[i])))issues.push('Desire complement form: '+i);
   if(condition==='استطاعت'&&voice==='active'&&!entry.ar.includes(present[i]))issues.push('Ability verb agreement: '+i);
   if(condition==='مجبوری'&&voice==='active'&&!entry.ar.includes(present[i]))issues.push('Obligation verb agreement: '+i);
+  if(condition==='مثبت'&&aspect==='simple'&&voice==='active'&&tense==='past'&&!entry.ar.startsWith(past[i]+' '))issues.push('Simple past agreement: '+i);
+  if(condition==='مثبت'&&aspect==='simple'&&voice==='active'&&tense==='present'&&!entry.ar.startsWith(present[i]+' '))issues.push('Simple present agreement: '+i);
+  if(condition==='مثبت'&&aspect==='simple'&&voice==='active'&&tense==='future'&&!entry.ar.includes(future[i]))issues.push('Simple future agreement: '+i);
+  if(condition==='نفی'&&aspect==='simple'&&voice==='active'&&tense==='future'&&!entry.ar.includes(futureNeg[i]))issues.push('Negative future agreement: '+i);
   if(condition==='نفی'&&voice==='active'&&aspect==='continuous'&&tense==='present'&&!entry.ar.startsWith(notProgressive[i]+' '))issues.push('Negative progressive agreement: '+i);
   if(condition==='استطاعت'&&voice==='active'&&!entry.ur.endsWith(tense==='past'?canPastUr[i]:tense==='future'?canFutureUr[i]:canNowUr[i]))issues.push('Ability Urdu agreement: '+i);
  }
