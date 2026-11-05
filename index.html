@@ -179,8 +179,8 @@ function sentence(i,t,a,v,c){
       ar=t==='past'?`مَا ${kana[i]} ${ongoing[i]} ${pr} الشُّغْل`:t==='present'?`${negativeNow[i]} ${ongoing[i]} ${pr} الشُّغْل الْحِين`:`بُكْرَة هَالْوَقْت مَا ${willbe[i]} ${ongoing[i]} ${pr} الشُّغْل`;
       ur=`${p} ${t==='past'?'اس وقت':t==='future'?'کل اس وقت':'ابھی'} کام مکمل نہیں کر ${t==='past'?progPast[i]:t==='future'?progFut[i]:prog[i]}`;
     }else{
-      ar=t==='past'?`مَا ${pa} الشُّغْل`:t==='present'?`مَا ${pr} الشُّغْل`:`بُكْرَة ${futureNeg[i]} الشُّغْل`;
-      ur=t==='past'?`${p} نے کام مکمل نہیں کیا`:t==='present'?`${p} کام مکمل ${simpleNowNegUr[i]}`:`${p} کل کام مکمل ${simpleFutureNegUr[i]}`;
+      ar=t==='past'?`مَا ${pa} الشُّغْل`:t==='present'?`مَا ${pr} الشُّغْل كُلّ يَوْم`:`بُكْرَة ${futureNeg[i]} الشُّغْل`;
+      ur=t==='past'?`${p} نے کام مکمل نہیں کیا`:t==='present'?`${p} روز کام مکمل ${simpleNowNegUr[i]}`:`${p} کل کام مکمل ${simpleFutureNegUr[i]}`;
     }
    }else{
     ar=c==='ابھی تک نہیں'?(t==='past'?'لِذَاك الْوَقْت الشُّغْل مَا خَلَص':t==='present'?'لِلْحِين الشُّغْل مَا خَلَص':'بُكْرَة هَالْوَقْت الشُّغْل لِلْحِين مَا خَلَص'):
@@ -188,6 +188,7 @@ function sentence(i,t,a,v,c){
     (t==='past'?'الشُّغْل مَا خَلَص':t==='present'?'الشُّغْل مَا يِخْلَص كُلّ يَوْم':'بُكْرَة الشُّغْل مَا رَاح يِخْلَص');
     ur=c==='ابھی تک نہیں'?`کام ${t==='past'?'اس وقت تک':t==='future'?'کل اس وقت تک':'ابھی تک'} مکمل نہیں ہوا ${t==='past'?'تھا':t==='future'?'ہوگا':'ہے'}`:cont||dur?`کام مکمل کرنے کا عمل ${t==='past'?'اس وقت':t==='future'?'کل اس وقت':'ابھی'} جاری نہیں ${t==='past'?'تھا':t==='future'?'ہوگا':'ہے'}`:`کام ${t==='past'?'مکمل نہیں ہوا':t==='future'?'کل مکمل نہیں ہوگا':'روز مکمل نہیں ہوتا'}`;
    }
+   if(c==='نفی'&&!cont&&!dur&&!perf&&t==='present')note='موجودہ سادہ نفی کو یہاں روزمرہ عادت کے طور پر دکھایا گیا ہے: «ما أخلص الشغل كل يوم» یعنی «میں روز کام مکمل نہیں کرتا»۔ «الحين ما أخلص» کے فوری موجودہ معنی سے اسے الگ سمجھیں۔';
    if(c==='ابھی تک نہیں'&&(cont||dur))note='«ابھی تک نہیں» تکمیل نہ ہونے کا مفہوم ہے، جاری عمل کی نفی نہیں؛ اس خانے میں فطری تکمیل والا متبادل دکھایا گیا ہے۔';
    return {ar,ur,kind,note};
  }
@@ -302,6 +303,7 @@ function auditExamples(){
   if(condition==='شرط'&&tense==='past'&&(!entry.ar.startsWith('لَوْ ')||!entry.ar.includes('كَان ارْتَحْنَا')||!entry.ur.includes('آرام کر لیتے')))issues.push('Counterfactual past mismatch: '+i);
   if(condition==='شرط'&&tense!=='past'&&!entry.ar.startsWith('إِذَا '))issues.push('Real conditional marker mismatch: '+i);
   if(condition==='شرط'&&voice==='active'&&!entry.ar.includes(persons[i][0]+' '+past[i]))issues.push('Conditional pronoun disambiguation: '+i);
+  if(condition==='نفی'&&voice==='active'&&aspect==='simple'&&tense==='present'&&(!entry.ar.includes('كُلّ يَوْم')||!entry.ur.includes('روز کام')))issues.push('Present habitual negation context: '+i);
   if(condition==='نفی'&&voice==='active'&&aspect==='perfectContinuous'&&!entry.ur.endsWith(tense==='past'?negBusyPastUr[i]:tense==='future'?negBusyFutureUr[i]:busyNowUr[i].split(' ').pop()))issues.push('Negative duration Urdu gender agreement: '+i+'/'+tense);
   if(condition==='اجازت'&&!entry.ar.endsWith('؟'))issues.push('Permission question punctuation: '+i);
   if(condition==='احتمال'&&!entry.ar.startsWith('يِمْكِن '))issues.push('Possibility marker: '+i);
