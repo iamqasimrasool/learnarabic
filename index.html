@@ -93,6 +93,7 @@ const aspectName={simple:'سادہ',continuous:'جاری',perfect:'مکمل',per
 const tenseNames={past:'ماضی',present:'حال',future:'مستقبل'};
 const pUr=['میں','تم','تم','وہ','وہ','ہم','تم سب','وہ سب'];
 const conditionalUr=['کروں','کرو','کرو','کرے','کرے','کریں','کرو','کریں'];
+const forWhomUr=['میرے لیے','تمہارے لیے','تمہارے لیے','اس کے لیے','اس کے لیے','ہمارے لیے','تم سب کے لیے','ان کے لیے'];
 const wishPast=['يَا لَيْتِنِي','يَا لَيْتَك','يَا لَيْتِك','يَا لَيْتَه','يَا لَيْتَهَا','يَا لَيْتِنَا','يَا لَيْتَكُمْ','يَا لَيْتَهُمْ'];
 const notProgressive=['مَانِي','مَانْتَ','مَانْتِي','مَاهُو','مَاهِي','مَانَّا','مَانْتُوا','مَاهُمْ'];
 const canPastUr=['سکا','سکے','سکی','سکا','سکی','سکے','سکے','سکے'];
@@ -227,17 +228,17 @@ function sentence(i,t,a,v,c){
  }
  if(c==='مجبوری'){
    ar=isA?(t==='past'?`كَان لَازِم ${pr} الشُّغْل أَمْس`:t==='present'?`لَازِم ${pr} الشُّغْل الْحِين`:`بُكْرَة لَازِم ${pr} الشُّغْل`):(t==='past'?'كَان لَازِم الشُّغْل يِخْلَص أَمْس':t==='present'?'لَازِم الشُّغْل يِخْلَص الْحِين':'بُكْرَة لَازِم الشُّغْل يِخْلَص');
-   ur=isA?`${p} کے لیے ${t==='past'?'کل':t==='future'?'کل':'ابھی'} کام مکمل کرنا ضروری ${t==='past'?'تھا':'ہے'}`:`کام کا ${t==='past'?'کل':t==='future'?'کل':'ابھی'} مکمل ہونا ضروری ${t==='past'?'تھا':'ہے'}`;
+   ur=isA?`${forWhomUr[i]} ${t==='past'?'گزشتہ روز':t==='future'?'کل':'ابھی'} کام مکمل کرنا ضروری ${t==='past'?'تھا':'ہے'}`:`کام کا ${t==='past'?'کل':t==='future'?'کل':'ابھی'} مکمل ہونا ضروری ${t==='past'?'تھا':'ہے'}`;
    return {ar,ur,kind,note:'لَازِم ضرورت/مجبوری ظاہر کرتا ہے؛ اصل aspect اس سیاق میں برقرار رکھنا لازم نہیں۔'};
  }
  if(c==='اجازت'){
    ar=isA?(t==='past'?`كَان عَادِي ${persons[i][0]} ${pr} الشُّغْل أَمْس؟`:t==='present'?`عَادِي ${persons[i][0]} ${pr} الشُّغْل الْحِين؟`:`عَادِي ${persons[i][0]} ${pr} الشُّغْل بُكْرَة؟`):(t==='past'?'كَان عَادِي الشُّغْل يِخْلَص أَمْس؟':t==='present'?'عَادِي الشُّغْل يِخْلَص الْحِين؟':'عَادِي الشُّغْل يِخْلَص بُكْرَة؟');
-   ur=isA?`کیا ${p} کے لیے ${t==='past'?'کل':t==='future'?'کل':'ابھی'} کام مکمل کرنا ${t==='past'?'ٹھیک تھا':'ٹھیک ہے'}؟`:`کیا کام کا ${t==='past'?'کل':t==='future'?'کل':'ابھی'} مکمل ہونا ${t==='past'?'ٹھیک تھا':'ٹھیک ہے'}؟`;
+   ur=isA?`کیا ${forWhomUr[i]} ${t==='past'?'گزشتہ روز':t==='future'?'کل':'ابھی'} کام مکمل کرنا ${t==='past'?'ٹھیک تھا':'ٹھیک ہے'}؟`:`کیا کام کا ${t==='past'?'کل':t==='future'?'کل':'ابھی'} مکمل ہونا ${t==='past'?'ٹھیک تھا':'ٹھیک ہے'}؟`;
    return {ar,ur,kind,note:'«عادي؟» غیر رسمی اجازت یا قابلِ قبول ہونے کا سوال ہے۔ عام گفتگو میں «عادي أخلص الشغل الحين؟» (کیا میں ابھی کام مکمل کر لوں؟) زیادہ مختصر ہے؛ یہاں ضمیر تعلیمی وضاحت کے لیے دکھایا گیا ہے۔ دوسرے شخص سے اجازت مانگنے کے لیے «ممكن أخلص الشغل الحين؟» بھی عام فہم ہے۔ ماضی کا سوال پچھلی اجازت کے بارے میں ہے۔'};
  }
  if(c==='احتمال'){
    ar=isA?(t==='past'?`يِمْكِن ${persons[i][0]} ${pa} الشُّغْل أَمْس`:t==='present'?`يِمْكِن ${persons[i][0]} ${pr} الشُّغْل الْحِين`:`يِمْكِن ${persons[i][0]} ${fu} الشُّغْل بُكْرَة`):(t==='past'?'يِمْكِن الشُّغْل خَلَص أَمْس':t==='present'?'يِمْكِن الشُّغْل يِخْلَص الْحِين':'يِمْكِن الشُّغْل يِخْلَص بُكْرَة');
-   ur=isA?`شاید ${p} ${t==='past'?'نے کل کام مکمل کیا':t==='future'?'کل کام مکمل کرے':'ابھی کام مکمل کرے'}`:`شاید کام ${t==='past'?'کل مکمل ہو گیا':t==='future'?'کل مکمل ہو جائے':'ابھی مکمل ہو جائے'}`;
+   ur=isA?(t==='past'?`شاید ${p} نے گزشتہ روز کام مکمل کیا`:`شاید ${p} ${t==='future'?'کل':'ابھی'} کام مکمل ${conditionalUr[i]}`):`شاید کام ${t==='past'?'کل مکمل ہو گیا':t==='future'?'کل مکمل ہو جائے':'ابھی مکمل ہو جائے'}`;
    return {ar,ur,kind,note:'«يمكن» = شاید/ممکن ہے، «أقدر» = کر سکنے کی صلاحیت۔ عام گفتگو میں «يمكن يخلص الشغل بكرة» (شاید وہ کل کام مکمل کرے) جیسا مختصر جملہ سننے کو ملتا ہے؛ یہاں ضمیر تعلیمی وضاحت کے لیے لکھا ہے۔ «يمكن» کو «أقدر» کا مترادف نہ سمجھیں۔'};
  }
  if(c==='عمل جاری'){
@@ -306,6 +307,8 @@ function auditExamples(){
   if(condition==='ابھی تک نہیں'&&voice==='nonagent'&&tense==='present'&&entry.ur!=='کام ابھی تک مکمل نہیں ہوا')issues.push('Nonagent not-yet Urdu present completion: '+i);
   if(condition==='نفی'&&voice==='active'&&aspect==='simple'&&tense==='present'&&(!entry.ar.includes('كُلّ يَوْم')||!entry.ur.includes('روز کام')))issues.push('Present habitual negation context: '+i);
   if(condition==='نفی'&&voice==='active'&&aspect==='perfectContinuous'&&!entry.ur.endsWith(tense==='past'?negBusyPastUr[i]:tense==='future'?negBusyFutureUr[i]:busyNowUr[i].split(' ').pop()))issues.push('Negative duration Urdu gender agreement: '+i+'/'+tense);
+  if((condition==='مجبوری'||condition==='اجازت')&&voice==='active'&&!entry.ur.includes(forWhomUr[i]))issues.push('Urdu modal case agreement: '+i+'/'+condition);
+  if(condition==='احتمال'&&voice==='active'&&tense!=='past'&&!entry.ur.endsWith(conditionalUr[i]))issues.push('Urdu possibility subjunctive agreement: '+i+'/'+tense);
   if(condition==='اجازت'&&!entry.ar.endsWith('؟'))issues.push('Permission question punctuation: '+i);
   if(condition==='احتمال'&&!entry.ar.startsWith('يِمْكِن '))issues.push('Possibility marker: '+i);
   if((condition==='اجازت'||condition==='احتمال')&&voice==='active'&&!entry.ar.includes(persons[i][0]+' '+present[i])&&!(condition==='احتمال'&&tense==='past'&&entry.ar.includes(persons[i][0]+' '+past[i]))&&!(condition==='احتمال'&&tense==='future'&&entry.ar.includes(persons[i][0]+' '+future[i])))issues.push('Modal pronoun clarity: '+i+'/'+condition+'/'+tense);
