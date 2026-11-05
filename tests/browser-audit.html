@@ -17,7 +17,7 @@ run.onclick=async()=>{
  run.disabled=voice.disabled=true;
  const w=frame.contentWindow,d=frame.contentDocument,by=id=>d.getElementById(id);
  const person=by('person'),condition=by('condition'),panel=by('wordPanel');
- const previous=[person.value,condition.value,frame.style.width],lines=[];
+ const previous=[person.value,condition.value,frame.style.width,by('detail').value,by('scope').value],lines=[];
  let cells=0,words=0,filters=0,last,place='startup';
  const say=line=>{lines.push(line);report.textContent=lines.join('\n');};
  const original=Object.getOwnPropertyDescriptor(w,'speechSynthesis');
@@ -25,6 +25,12 @@ run.onclick=async()=>{
  // Use plain utterances so the test voice can be selected without an OS voice.
  const Utterance=w.SpeechSynthesisUtterance;
  try{
+  select(by('scope'),'nonagent');select(by('detail'),'compact');select(condition,'مجبوری');
+  check(person.disabled&&by('rows').rows.length===1,'Shared obligation row');
+  select(condition,'احتمال');check(by('rows').rows.length===4,'Four probability aspects');
+  select(by('scope'),'active');check(!person.disabled&&by('rows').rows.length===4,'Active aspects');
+  select(by('scope'),'both');select(by('detail'),'full');
+  say('PASS compact rows, shared agent scope and probability aspects');
   const audit=w.auditNajdiExamples();
   check(audit.checked===2304&&audit.passed,JSON.stringify(audit));say('PASS 2,304 generated entries and grammar regressions');
   Object.defineProperty(w,'speechSynthesis',{configurable:true,value:mock});
@@ -78,7 +84,7 @@ run.onclick=async()=>{
  }catch(e){say('FAIL '+place+' — '+e.message);}
  finally{
   if(original)Object.defineProperty(w,'speechSynthesis',original);else delete w.speechSynthesis;
-  w.SpeechSynthesisUtterance=Utterance;frame.style.width=previous[2];select(person,previous[0]);select(condition,previous[1]);run.disabled=voice.disabled=false;
+  w.SpeechSynthesisUtterance=Utterance;frame.style.width=previous[2];select(by('scope'),previous[4]);select(by('detail'),previous[3]);select(person,previous[0]);select(condition,previous[1]);run.disabled=voice.disabled=false;
  }
 };
 voice.onclick=()=>{
