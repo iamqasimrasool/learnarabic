@@ -104,6 +104,9 @@ const simpleFutureUr=['کروں گا','کرو گے','کرو گی','کرے گا',
 const simpleFutureNegUr=['نہیں کروں گا','نہیں کرو گے','نہیں کرو گی','نہیں کرے گا','نہیں کرے گی','نہیں کریں گے','نہیں کرو گے','نہیں کریں گے'];
 const simpleNowNegUr=['نہیں کرتا ہوں','نہیں کرتے ہو','نہیں کرتی ہو','نہیں کرتا ہے','نہیں کرتی ہے','نہیں کرتے ہیں','نہیں کرتے ہو','نہیں کرتے ہیں'];
 const prog=['رہا ہوں','رہے ہو','رہی ہو','رہا ہے','رہی ہے','رہے ہیں','رہے ہو','رہے ہیں'];
+const busyPastUr=['مصروف تھا','مصروف تھے','مصروف تھیں','مصروف تھا','مصروف تھی','مصروف تھے','مصروف تھے','مصروف تھے'];
+const busyNowUr=['مصروف ہوں','مصروف ہو','مصروف ہو','مصروف ہے','مصروف ہے','مصروف ہیں','مصروف ہو','مصروف ہیں'];
+const busyFutureUr=['مصروف ہوں گا','مصروف ہوگے','مصروف ہوگی','مصروف ہوگا','مصروف ہوگی','مصروف ہوں گے','مصروف ہوگے','مصروف ہوں گے'];
 const progPast=['رہا تھا','رہے تھے','رہی تھی','رہا تھا','رہی تھی','رہے تھے','رہے تھے','رہے تھے'];
 const progFut=['رہا ہوں گا','رہے ہوگے','رہی ہوگی','رہا ہوگا','رہی ہوگی','رہے ہوں گے','رہے ہوگے','رہے ہوں گے'];
 const done=['چکا ہوں','چکے ہو','چکی ہو','چکا ہے','چکی ہے','چکے ہیں','چکے ہو','چکے ہیں'];
@@ -124,7 +127,7 @@ function base(i,t,a,v){
    ur=`${p} کام مکمل کر ${t==='past'?donePast[i]:t==='present'?done[i]:doneFut[i]}`;
   }else{
    ar=t==='past'?`وَقْتَهَا صَار ${possess[i]} سَاعَة وَ${persons[i][0]} ${present[i]} الشُّغْل`:t==='present'?`${possess[i]} سَاعَة وَ${persons[i][0]} ${present[i]} الشُّغْل`:`بُكْرَة هَالْوَقْت بْيِصِير ${possess[i]} سَاعَتَيْن وَ${persons[i][0]} ${present[i]} الشُّغْل`;
-   ur=t==='past'?`اس وقت ${p} ایک گھنٹے سے کام مکمل کرنے میں مصروف تھا/تھی/تھے`:t==='present'?`${p} ایک گھنٹے سے کام مکمل کرنے میں مصروف ہے/ہیں`:`کل اس وقت ${p} دو گھنٹے سے کام مکمل کرنے میں مصروف ہوگا/ہوگی/ہوں گے`;
+   ur=t==='past'?`اس وقت ${p} ایک گھنٹے سے کام مکمل کرنے میں ${busyPastUr[i]}`:t==='present'?`${p} ایک گھنٹے سے کام مکمل کرنے میں ${busyNowUr[i]}`:`کل اس وقت ${p} دو گھنٹے سے کام مکمل کرنے میں ${busyFutureUr[i]}`;
   }
  }else{
   // Subject-first resultative or unspecified-agent: not a formal morphological passive.
@@ -294,6 +297,7 @@ function auditExamples(){
   if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&(!entry.ar.includes(present[i])||entry.ar.includes(future[i])))issues.push('Desire complement form: '+i);
   if(condition==='استطاعت'&&voice==='active'&&!entry.ar.includes(present[i]))issues.push('Ability verb agreement: '+i);
   if(condition==='مجبوری'&&voice==='active'&&!entry.ar.includes(present[i]))issues.push('Obligation verb agreement: '+i);
+  if(condition==='مثبت'&&aspect==='perfectContinuous'&&voice==='active'&&!entry.ur.endsWith(tense==='past'?busyPastUr[i]:tense==='future'?busyFutureUr[i]:busyNowUr[i]))issues.push('Duration Urdu agreement: '+i);
   if(condition==='مثبت'&&aspect==='simple'&&voice==='active'&&tense==='past'&&!entry.ar.startsWith(past[i]+' '))issues.push('Simple past agreement: '+i);
   if(condition==='مثبت'&&aspect==='simple'&&voice==='active'&&tense==='present'&&!entry.ar.startsWith(present[i]+' '))issues.push('Simple present agreement: '+i);
   if(condition==='مثبت'&&aspect==='simple'&&voice==='active'&&tense==='future'&&!entry.ar.includes(future[i]))issues.push('Simple future agreement: '+i);
