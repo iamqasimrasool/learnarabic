@@ -163,7 +163,7 @@ function sentence(i,t,a,v,c){
  if(c==='نفی'||c==='ابھی تک نہیں'){
    if(isA){
     if(c==='ابھی تک نہیں'){
-      ar=t==='past'?`لِذَاك الْوَقْت مَا ${pa} الشُّغْل`:t==='present'?`لِلْحِين مَا ${pa} الشُّغْل`:`بُكْرَة هَالْوَقْت مَا ${willbe[i]} ${pa} الشُّغْل`;
+      ar=t==='past'?`لِذَاك الْوَقْت مَا ${pa} الشُّغْل`:t==='present'?`لِلْحِين مَا ${pa} الشُّغْل`:`بُكْرَة هَالْوَقْت لِلْحِين مَا ${pa} الشُّغْل`;
       ur=t==='past'?`اس وقت تک ${p} نے کام مکمل نہیں کیا تھا`:t==='present'?`${p} نے ابھی تک کام مکمل نہیں کیا`:`کل اس وقت تک ${p} نے کام مکمل نہیں کیا ہوگا`;
     }else if(dur){
       ar=t==='past'?`وَقْتَهَا مَا ${kana[i]} ${ongoing[i]} ${pr} الشُّغْل`:t==='present'?`${notProgressive[i]} ${ongoing[i]} ${pr} الشُّغْل الْحِين`:`بُكْرَة هَالْوَقْت مَا ${willbe[i]} ${ongoing[i]} ${pr} الشُّغْل`;
@@ -176,7 +176,7 @@ function sentence(i,t,a,v,c){
       ur=t==='past'?`${p} نے کام مکمل نہیں کیا`:t==='present'?`${p} کام مکمل ${simpleNowNegUr[i]}`:`${p} کل کام مکمل ${simpleFutureNegUr[i]}`;
     }
    }else{
-    ar=c==='ابھی تک نہیں'?(t==='past'?'لِذَاك الْوَقْت الشُّغْل مَا خَلَص':t==='present'?'لِلْحِين الشُّغْل مَا خَلَص':'بُكْرَة هَالْوَقْت الشُّغْل مَا بْيِكُون خَلَص'):
+    ar=c==='ابھی تک نہیں'?(t==='past'?'لِذَاك الْوَقْت الشُّغْل مَا خَلَص':t==='present'?'لِلْحِين الشُّغْل مَا خَلَص':'بُكْرَة هَالْوَقْت الشُّغْل لِلْحِين مَا خَلَص'):
     cont||dur?(t==='past'?'وَقْتَهَا مَا كَانُوا قَاعْدِين يِخَلِّصُون الشُّغْل':t==='present'?'الْحِين مَا هُمْ قَاعْدِين يِخَلِّصُون الشُّغْل':'بُكْرَة هَالْوَقْت مَا رَاح يِكُونُون قَاعْدِين يِخَلِّصُون الشُّغْل'):
     (t==='past'?'الشُّغْل مَا خَلَص':t==='present'?'الشُّغْل مَا يِخْلَص كُلّ يَوْم':'بُكْرَة الشُّغْل مَا رَاح يِخْلَص');
     ur=c==='ابھی تک نہیں'?`کام ${t==='past'?'اس وقت تک':t==='future'?'کل اس وقت تک':'ابھی تک'} مکمل نہیں ہوا ${t==='past'?'تھا':t==='future'?'ہوگا':'ہے'}`:cont||dur?`کام مکمل کرنے کا عمل ${t==='past'?'اس وقت':t==='future'?'کل اس وقت':'ابھی'} جاری نہیں ${t==='past'?'تھا':t==='future'?'ہوگا':'ہے'}`:`کام ${t==='past'?'مکمل نہیں ہوا':t==='future'?'کل مکمل نہیں ہوگا':'روز مکمل نہیں ہوتا'}`;
@@ -218,7 +218,7 @@ function sentence(i,t,a,v,c){
  }
  if(c==='مجبوری'){
    ar=isA?(t==='past'?`كَان لَازِم ${pr} الشُّغْل أَمْس`:t==='present'?`لَازِم ${pr} الشُّغْل الْحِين`:`بُكْرَة لَازِم ${pr} الشُّغْل`):(t==='past'?'كَان لَازِم الشُّغْل يِخْلَص أَمْس':t==='present'?'لَازِم الشُّغْل يِخْلَص الْحِين':'بُكْرَة لَازِم الشُّغْل يِخْلَص');
-   ur=isA?`${p} کے لیے ${t==='past'?'کل':t==='future'?'کل':'ابھی'} کام مکمل کرنا ضروری ${t==='past'?'تھا':t==='future'?'ہوگا':'ہے'}`:`کام کا ${t==='past'?'کل':t==='future'?'کل':'ابھی'} مکمل ہونا ضروری ${t==='past'?'تھا':t==='future'?'ہوگا':'ہے'}`;
+   ur=isA?`${p} کے لیے ${t==='past'?'کل':t==='future'?'کل':'ابھی'} کام مکمل کرنا ضروری ${t==='past'?'تھا':'ہے'}`:`کام کا ${t==='past'?'کل':t==='future'?'کل':'ابھی'} مکمل ہونا ضروری ${t==='past'?'تھا':'ہے'}`;
    return {ar,ur,kind,note:'لَازِم ضرورت/مجبوری ظاہر کرتا ہے؛ اصل aspect اس سیاق میں برقرار رکھنا لازم نہیں۔'};
  }
  if(c==='اجازت'){
@@ -287,7 +287,7 @@ function auditExamples(){
   const entry=sentence(i,tense,aspect,voice,condition);checked++;
   if(!entry||typeof entry.ar!=='string'||!entry.ar.trim()||typeof entry.ur!=='string'||!entry.ur.trim())issues.push('Empty example: '+[i,condition,voice,aspect,tense].join('/'));
   if(/undefined|null|\\$\\{/.test(entry.ar+' '+entry.ur))issues.push('Broken placeholder: '+[i,condition,voice,aspect,tense].join('/'));
-  if(condition==='ابھی تک نہیں'&&tense==='future'&&voice==='active'&&!entry.ar.includes(past[i]))issues.push('Future completion agreement: '+i);
+  if(condition==='ابھی تک نہیں'&&tense==='future'&&voice==='active'&&(!entry.ar.includes(past[i])||!entry.ar.includes('لِلْحِين مَا')))issues.push('Future not-yet-completed agreement: '+i);
   if(condition==='خواہش'&&tense==='past'&&voice==='active'&&!entry.ar.startsWith(wishPast[i]+' '))issues.push('Past wish pronoun agreement: '+i);
   if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&!entry.ur.endsWith(wantUr[i]))issues.push('Desire Urdu agreement: '+i);
   if(condition==='استطاعت'&&voice==='active'&&!entry.ar.includes(present[i]))issues.push('Ability verb agreement: '+i);
