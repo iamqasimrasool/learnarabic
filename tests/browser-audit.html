@@ -5,11 +5,12 @@
 <h1>Learn Arabic browser audit</h1>
 <button id="run" disabled>Run checks</button> <button id="voice" disabled>Test Arabic audio on this device</button>
 <pre id="report" role="status">Loading examples…</pre><p id="audio"></p>
-<iframe id="site" src="../index.html" title="Page under test"></iframe>
+<iframe id="site" title="Page under test"></iframe>
 <script>
 const frame=document.querySelector('iframe'), run=document.querySelector('#run'), voice=document.querySelector('#voice');
 const report=document.querySelector('#report'),audio=document.querySelector('#audio');
 frame.onload=()=>{run.disabled=voice.disabled=false;report.textContent='Ready';};
+frame.src='../index.html?audit='+Date.now();
 const check=(ok,message)=>{if(!ok)throw Error(message);};
 function select(el,value){el.value=value;el.dispatchEvent(new Event('change'));}
 run.onclick=async()=>{
@@ -58,6 +59,10 @@ run.onclick=async()=>{
   }
   check(filters===104&&cells===2304,'Incomplete matrix');
   say('PASS '+filters+' filter combinations; '+cells+' sentence, grammar and audio-button checks; '+words+' word clicks');
+  const notice=by('audioStatus');
+  last.onerror({error:'synthesis-failed'});check(notice.textContent.includes('synthesis-failed'),'Playback error feedback');
+  by('rows').querySelector('.speak-btn').click();last.onerror({error:'canceled'});check(!notice.textContent,'Spurious cancellation error');
+  say('PASS audio error and cancellation feedback');
   for(const width of [320,375,390,430,600,700,768,1024,1440]){
    place='layout '+width;frame.style.width=width+'px';
    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
