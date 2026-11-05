@@ -186,7 +186,7 @@ function sentence(i,t,a,v,c){
     ar=c==='ابھی تک نہیں'?(t==='past'?'لِذَاك الْوَقْت الشُّغْل مَا خَلَص':t==='present'?'لِلْحِين الشُّغْل مَا خَلَص':'بُكْرَة هَالْوَقْت الشُّغْل لِلْحِين مَا خَلَص'):
     cont||dur?(t==='past'?'وَقْتَهَا مَا كَانُوا قَاعْدِين يِخَلِّصُون الشُّغْل':t==='present'?'الْحِين مَا هُمْ قَاعْدِين يِخَلِّصُون الشُّغْل':'بُكْرَة هَالْوَقْت مَا رَاح يِكُونُون قَاعْدِين يِخَلِّصُون الشُّغْل'):
     (t==='past'?'الشُّغْل مَا خَلَص':t==='present'?'الشُّغْل مَا يِخْلَص كُلّ يَوْم':'بُكْرَة الشُّغْل مَا رَاح يِخْلَص');
-    ur=c==='ابھی تک نہیں'?`کام ${t==='past'?'اس وقت تک':t==='future'?'کل اس وقت تک':'ابھی تک'} مکمل نہیں ہوا ${t==='past'?'تھا':t==='future'?'ہوگا':'ہے'}`:cont||dur?`کام مکمل کرنے کا عمل ${t==='past'?'اس وقت':t==='future'?'کل اس وقت':'ابھی'} جاری نہیں ${t==='past'?'تھا':t==='future'?'ہوگا':'ہے'}`:`کام ${t==='past'?'مکمل نہیں ہوا':t==='future'?'کل مکمل نہیں ہوگا':'روز مکمل نہیں ہوتا'}`;
+    ur=c==='ابھی تک نہیں'?(t==='past'?'اس وقت تک کام مکمل نہیں ہوا تھا':t==='present'?'کام ابھی تک مکمل نہیں ہوا':'کل اس وقت تک کام مکمل نہیں ہوا ہوگا'):cont||dur?`کام مکمل کرنے کا عمل ${t==='past'?'اس وقت':t==='future'?'کل اس وقت':'ابھی'} جاری نہیں ${t==='past'?'تھا':t==='future'?'ہوگا':'ہے'}`:`کام ${t==='past'?'مکمل نہیں ہوا':t==='future'?'کل مکمل نہیں ہوگا':'روز مکمل نہیں ہوتا'}`;
    }
    if(c==='نفی'&&!cont&&!dur&&!perf&&t==='present')note='موجودہ سادہ نفی کو یہاں روزمرہ عادت کے طور پر دکھایا گیا ہے: «ما أخلص الشغل كل يوم» یعنی «میں روز کام مکمل نہیں کرتا»۔ «الحين ما أخلص» کے فوری موجودہ معنی سے اسے الگ سمجھیں۔';
    if(c==='ابھی تک نہیں'&&(cont||dur))note='«ابھی تک نہیں» تکمیل نہ ہونے کا مفہوم ہے، جاری عمل کی نفی نہیں؛ اس خانے میں فطری تکمیل والا متبادل دکھایا گیا ہے۔';
@@ -303,6 +303,7 @@ function auditExamples(){
   if(condition==='شرط'&&tense==='past'&&(!entry.ar.startsWith('لَوْ ')||!entry.ar.includes('كَان ارْتَحْنَا')||!entry.ur.includes('آرام کر لیتے')))issues.push('Counterfactual past mismatch: '+i);
   if(condition==='شرط'&&tense!=='past'&&!entry.ar.startsWith('إِذَا '))issues.push('Real conditional marker mismatch: '+i);
   if(condition==='شرط'&&voice==='active'&&!entry.ar.includes(persons[i][0]+' '+past[i]))issues.push('Conditional pronoun disambiguation: '+i);
+  if(condition==='ابھی تک نہیں'&&voice==='nonagent'&&tense==='present'&&entry.ur!=='کام ابھی تک مکمل نہیں ہوا')issues.push('Nonagent not-yet Urdu present completion: '+i);
   if(condition==='نفی'&&voice==='active'&&aspect==='simple'&&tense==='present'&&(!entry.ar.includes('كُلّ يَوْم')||!entry.ur.includes('روز کام')))issues.push('Present habitual negation context: '+i);
   if(condition==='نفی'&&voice==='active'&&aspect==='perfectContinuous'&&!entry.ur.endsWith(tense==='past'?negBusyPastUr[i]:tense==='future'?negBusyFutureUr[i]:busyNowUr[i].split(' ').pop()))issues.push('Negative duration Urdu gender agreement: '+i+'/'+tense);
   if(condition==='اجازت'&&!entry.ar.endsWith('؟'))issues.push('Permission question punctuation: '+i);
