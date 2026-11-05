@@ -190,14 +190,14 @@ function sentence(i,t,a,v,c){
    return {ar,ur,kind,note};
  }
  if(c==='شرط'){
-   const result=isA?'یہ بہتر ہوگا':'ہم آرام کر سکیں گے';
+   const result='ہم آرام کر سکیں گے';
    if(t==='past'){
     ar=isA?`لَوْ ${pa} الشُّغْل بَدْرِي، كَان ارْتَحْنَا`:'لَوْ الشُّغْل خَلَص بَدْرِي، كَان ارْتَحْنَا';
     ur=isA?`اگر ${p} نے کام جلد مکمل کیا ہوتا تو ہم آرام کر لیتے`:'اگر کام جلد مکمل ہو گیا ہوتا تو ہم آرام کر لیتے';
    }else{
     const action=isA?`${pa} الشُّغْل`:'الشُّغْل خَلَص';
-    ar=`إِذَا ${action} ${t==='future'?'بُكْرَة':'الْحِين'}، ${isA?'بْيِكُون أَحْسَن':'بِنْرْتَاح'}`;
-    ur=`اگر ${isA?p+' کام مکمل '+conditionalUr[i]:'کام مکمل ہو جائے'} تو ${result}`;
+    ar=`إِذَا ${action} ${t==='future'?'بُكْرَة':'الْحِين'}، بِنْرْتَاح`;
+    ur=`اگر ${isA?p+' کام مکمل '+conditionalUr[i]:'کام مکمل ہو جائے'} ${t==='future'?'کل':'ابھی'} تو ${result}`;
    }
    return {ar,ur,kind,note:'روزمرہ نجدی میں مستقبل کی حقیقی شرط کے بعد بھی ماضی کی فعلی صورت (مثلاً إذا خلصت) آ سکتی ہے؛ یہ معنی میں مستقبل ہی ہے۔ جاری/مدتی معنی اس مختصر شرط میں نہیں آتے۔'};
  }
@@ -295,6 +295,7 @@ function auditExamples(){
   if(condition==='ابھی تک نہیں'&&tense==='future'&&voice==='active'&&(!entry.ar.includes(past[i])||!entry.ar.includes('لِلْحِين مَا')))issues.push('Future not-yet-completed agreement: '+i);
   if(condition==='خواہش'&&tense==='past'&&voice==='active'&&!entry.ar.startsWith(wishPast[i]+' '))issues.push('Past wish pronoun agreement: '+i);
   if(condition==='شرط'&&tense!=='past'&&voice==='active'&&!entry.ur.includes(pUr[i]+' کام مکمل '+conditionalUr[i]))issues.push('Conditional Urdu agreement: '+i);
+  if(condition==='شرط'&&tense!=='past'&&(!entry.ar.endsWith('بِنْرْتَاح')||!entry.ur.includes('ہم آرام کر سکیں گے')))issues.push('Conditional result meaning mismatch: '+i);
   if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&!entry.ur.endsWith(wantUr[i]))issues.push('Desire Urdu agreement: '+i);
   if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&(!entry.ar.includes(present[i])||entry.ar.includes(future[i])))issues.push('Desire complement form: '+i);
   if(condition==='استطاعت'&&voice==='active'&&!entry.ar.includes(present[i]))issues.push('Ability verb agreement: '+i);
