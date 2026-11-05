@@ -228,14 +228,14 @@ function sentence(i,t,a,v,c){
    return {ar,ur,kind,note:'لَازِم ضرورت/مجبوری ظاہر کرتا ہے؛ اصل aspect اس سیاق میں برقرار رکھنا لازم نہیں۔'};
  }
  if(c==='اجازت'){
-   ar=isA?(t==='past'?`كَان عَادِي ${pr} الشُّغْل أَمْس؟`:t==='present'?`عَادِي ${pr} الشُّغْل الْحِين؟`:`عَادِي ${pr} الشُّغْل بُكْرَة؟`):(t==='past'?'كَان عَادِي الشُّغْل يِخْلَص أَمْس؟':t==='present'?'عَادِي الشُّغْل يِخْلَص الْحِين؟':'عَادِي الشُّغْل يِخْلَص بُكْرَة؟');
+   ar=isA?(t==='past'?`كَان عَادِي ${persons[i][0]} ${pr} الشُّغْل أَمْس؟`:t==='present'?`عَادِي ${persons[i][0]} ${pr} الشُّغْل الْحِين؟`:`عَادِي ${persons[i][0]} ${pr} الشُّغْل بُكْرَة؟`):(t==='past'?'كَان عَادِي الشُّغْل يِخْلَص أَمْس؟':t==='present'?'عَادِي الشُّغْل يِخْلَص الْحِين؟':'عَادِي الشُّغْل يِخْلَص بُكْرَة؟');
    ur=isA?`کیا ${p} کے لیے ${t==='past'?'کل':t==='future'?'کل':'ابھی'} کام مکمل کرنا ${t==='past'?'ٹھیک تھا':'ٹھیک ہے'}؟`:`کیا کام کا ${t==='past'?'کل':t==='future'?'کل':'ابھی'} مکمل ہونا ${t==='past'?'ٹھیک تھا':'ٹھیک ہے'}؟`;
-   return {ar,ur,kind,note:'عَادِي؟ روزمرہ گفتگو میں قابلِ قبول ہونے/اجازت کا غیر رسمی سوال ہے؛ یہ قانونی اجازت کا باقاعدہ صیغہ نہیں۔'};
+   return {ar,ur,kind,note:'«عادي؟» کسی کام کے قابلِ قبول ہونے کی غیر رسمی اجازت ہے۔ یہاں ضمیر واضح لکھا ہے تاکہ «تم» اور «میں» کا فرق معلوم رہے؛ بول چال میں اسے حذف بھی کیا جا سکتا ہے۔ ماضی کا سوال پچھلی اجازت کے بارے میں ہے، نہ کہ اجازت ملنے کا دعویٰ۔'};
  }
  if(c==='احتمال'){
-   ar=isA?(t==='past'?`يِمْكِن ${pa} الشُّغْل أَمْس`:t==='present'?`يِمْكِن ${pr} الشُّغْل الْحِين`:`يِمْكِن ${fu} الشُّغْل بُكْرَة`):(t==='past'?'يِمْكِن الشُّغْل خَلَص أَمْس':t==='present'?'يِمْكِن الشُّغْل يِخْلَص الْحِين':'يِمْكِن الشُّغْل يِخْلَص بُكْرَة');
+   ar=isA?(t==='past'?`يِمْكِن ${persons[i][0]} ${pa} الشُّغْل أَمْس`:t==='present'?`يِمْكِن ${persons[i][0]} ${pr} الشُّغْل الْحِين`:`يِمْكِن ${persons[i][0]} ${fu} الشُّغْل بُكْرَة`):(t==='past'?'يِمْكِن الشُّغْل خَلَص أَمْس':t==='present'?'يِمْكِن الشُّغْل يِخْلَص الْحِين':'يِمْكِن الشُّغْل يِخْلَص بُكْرَة');
    ur=isA?`شاید ${p} ${t==='past'?'نے کل کام مکمل کیا':t==='future'?'کل کام مکمل کرے':'ابھی کام مکمل کرے'}`:`شاید کام ${t==='past'?'کل مکمل ہو گیا':t==='future'?'کل مکمل ہو جائے':'ابھی مکمل ہو جائے'}`;
-   return {ar,ur,kind,note:'يِمْكِن = شاید؛ احتمال کو صلاحیت سے الگ رکھیں۔'};
+   return {ar,ur,kind,note:'«يمكن» = شاید/ممکن ہے، «أقدر» = میں کر سکتا ہوں۔ امکان کے اس جملے میں ضمیر وضاحت کے لیے شامل ہے؛ عام بول چال میں سیاق واضح ہو تو حذف بھی ہوتا ہے۔'};
  }
  if(c==='عمل جاری'){
    if(isA){ar=t==='past'?`${kana[i]} ${ongoing[i]} ${pr} الشُّغْل وَقْتَهَا`:t==='present'?`${ongoing[i]} ${pr} الشُّغْل الْحِين`:`بُكْرَة هَالْوَقْت ${willbe[i]} ${ongoing[i]} ${pr} الشُّغْل`;ur=`${p} ${t==='past'?'اس وقت':t==='future'?'کل اس وقت':'ابھی'} کام مکمل کر ${t==='past'?progPast[i]:t==='future'?progFut[i]:prog[i]}`;}
@@ -300,6 +300,7 @@ function auditExamples(){
   if(condition==='شرط'&&tense==='past'&&(!entry.ar.startsWith('لَوْ ')||!entry.ar.includes('كَان ارْتَحْنَا')||!entry.ur.includes('آرام کر لیتے')))issues.push('Counterfactual past mismatch: '+i);
   if(condition==='شرط'&&tense!=='past'&&!entry.ar.startsWith('إِذَا '))issues.push('Real conditional marker mismatch: '+i);
   if(condition==='شرط'&&voice==='active'&&!entry.ar.includes(persons[i][0]+' '+past[i]))issues.push('Conditional pronoun disambiguation: '+i);
+  if((condition==='اجازت'||condition==='احتمال')&&voice==='active'&&!entry.ar.includes(persons[i][0]+' '+present[i])&&!(condition==='احتمال'&&tense==='past'&&entry.ar.includes(persons[i][0]+' '+past[i]))&&!(condition==='احتمال'&&tense==='future'&&entry.ar.includes(persons[i][0]+' '+future[i])))issues.push('Modal pronoun clarity: '+i+'/'+condition+'/'+tense);
   if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&!entry.ur.endsWith(wantUr[i]))issues.push('Desire Urdu agreement: '+i);
   if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&(!entry.ar.includes(present[i])||entry.ar.includes(future[i])))issues.push('Desire complement form: '+i);
   if(condition==='استطاعت'&&voice==='active'&&!entry.ar.includes(present[i]))issues.push('Ability verb agreement: '+i);
