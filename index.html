@@ -192,15 +192,15 @@ function sentence(i,t,a,v,c){
  if(c==='شرط'){
    const result='ہم آرام کر سکیں گے';
    if(t==='past'){
-    ar=isA?`لَوْ ${pa} الشُّغْل بَدْرِي، كَان ارْتَحْنَا`:'لَوْ الشُّغْل خَلَص بَدْرِي، كَان ارْتَحْنَا';
+    ar=isA?`لَوْ ${persons[i][0]} ${pa} الشُّغْل بَدْرِي، كَان ارْتَحْنَا`:'لَوْ الشُّغْل خَلَص بَدْرِي، كَان ارْتَحْنَا';
     ur=isA?`اگر ${p} نے کام جلد مکمل کیا ہوتا تو ہم آرام کر لیتے`:'اگر کام جلد مکمل ہو گیا ہوتا تو ہم آرام کر لیتے';
     note='«لو» یہاں ماضی کی خلافِ واقع شرط ہے: کام پہلے مکمل نہیں ہوا، اس لیے آرام بھی نہیں ملا۔ یہ «إذا» کی ممکنہ مستقبل والی شرط سے مختلف ہے۔';
    }else{
-    const action=isA?`${pa} الشُّغْل`:'الشُّغْل خَلَص';
+    const action=isA?`${persons[i][0]} ${pa} الشُّغْل`:'الشُّغْل خَلَص';
     ar=`إِذَا ${action} ${t==='future'?'بُكْرَة':'الْحِين'}، بِنْرْتَاح`;
     ur=`اگر ${isA?p+' کام مکمل '+conditionalUr[i]:'کام مکمل ہو جائے'} ${t==='future'?'کل':'ابھی'} تو ${result}`;
    }
-   return {ar,ur,kind,note:t==='past'?note:'«إذا» ممکنہ یا متوقع شرط کے لیے ہے۔ «إذا خلصت» میں فعل کی شکل ماضی جیسی ہے مگر یہاں معنی موجودہ/آئندہ شرط کا ہے۔ «لو خلصت» ماضی کی خلافِ واقع صورت ہو سکتی ہے۔ چاروں aspect یہاں الگ الگ ظاہر نہیں ہوتے۔'};
+   return {ar,ur,kind,note:t==='past'?note:'«إذا» ممکنہ یا متوقع شرط کے لیے ہے۔ «إذا خلصت» میں فعل کی شکل ماضی جیسی ہے مگر معنی موجودہ/آئندہ شرط کا ہے۔ «لو خلصت» ماضی کی خلافِ واقع صورت ہو سکتی ہے۔ ضمیر (أنا/أنت...) یہاں جان بوجھ کر واضح لکھا ہے تاکہ یکساں فعلی صیغوں میں فرق سیکھا جا سکے؛ عام گفتگو میں ضمیر حذف بھی ہوتا ہے۔ چاروں aspect یہاں الگ الگ ظاہر نہیں ہوتے۔'};
  }
  if(c==='خواہش'){
    if(isA){
@@ -299,6 +299,7 @@ function auditExamples(){
   if(condition==='شرط'&&tense!=='past'&&(!entry.ar.endsWith('بِنْرْتَاح')||!entry.ur.includes('ہم آرام کر سکیں گے')))issues.push('Conditional result meaning mismatch: '+i);
   if(condition==='شرط'&&tense==='past'&&(!entry.ar.startsWith('لَوْ ')||!entry.ar.includes('كَان ارْتَحْنَا')||!entry.ur.includes('آرام کر لیتے')))issues.push('Counterfactual past mismatch: '+i);
   if(condition==='شرط'&&tense!=='past'&&!entry.ar.startsWith('إِذَا '))issues.push('Real conditional marker mismatch: '+i);
+  if(condition==='شرط'&&voice==='active'&&!entry.ar.includes(persons[i][0]+' '+past[i]))issues.push('Conditional pronoun disambiguation: '+i);
   if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&!entry.ur.endsWith(wantUr[i]))issues.push('Desire Urdu agreement: '+i);
   if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&(!entry.ar.includes(present[i])||entry.ar.includes(future[i])))issues.push('Desire complement form: '+i);
   if(condition==='استطاعت'&&voice==='active'&&!entry.ar.includes(present[i]))issues.push('Ability verb agreement: '+i);
