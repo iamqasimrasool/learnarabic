@@ -305,6 +305,11 @@ function auditExamples(){
   if(condition==='شرط'&&tense!=='past'&&!entry.ar.startsWith('إِذَا '))issues.push('Real conditional marker mismatch: '+i);
   if(condition==='شرط'&&voice==='active'&&!entry.ar.includes(persons[i][0]+' '+past[i]))issues.push('Conditional pronoun disambiguation: '+i);
   if(condition==='ابھی تک نہیں'&&voice==='nonagent'&&tense==='present'&&entry.ur!=='کام ابھی تک مکمل نہیں ہوا')issues.push('Nonagent not-yet Urdu present completion: '+i);
+  if(/(?:میں|تم(?! سب)|ہم|وہ(?! سب)) کے لیے/.test(entry.ur))issues.push('Invalid Urdu pronoun oblique case: '+[i,condition,voice,aspect,tense].join('/'));
+  if(condition==='احتمال'&&voice==='active'&&tense==='past'&&!entry.ur.includes('نے گزشتہ روز'))issues.push('Possibility past time/case: '+i);
+  if(condition==='مجبوری'&&voice==='active'&&tense==='past'&&!entry.ur.includes('گزشتہ روز'))issues.push('Obligation past time: '+i);
+  if(condition==='اجازت'&&voice==='active'&&tense==='past'&&!entry.ur.includes('گزشتہ روز'))issues.push('Permission past time: '+i);
+  if(condition==='ابھی تک نہیں'&&voice==='nonagent'&&tense==='future'&&!entry.ur.includes('مکمل نہیں ہوا ہوگا'))issues.push('Future incomplete result Urdu: '+i);
   if(condition==='نفی'&&voice==='active'&&aspect==='simple'&&tense==='present'&&(!entry.ar.includes('كُلّ يَوْم')||!entry.ur.includes('روز کام')))issues.push('Present habitual negation context: '+i);
   if(condition==='نفی'&&voice==='active'&&aspect==='perfectContinuous'&&!entry.ur.endsWith(tense==='past'?negBusyPastUr[i]:tense==='future'?negBusyFutureUr[i]:busyNowUr[i].split(' ').pop()))issues.push('Negative duration Urdu gender agreement: '+i+'/'+tense);
   if((condition==='مجبوری'||condition==='اجازت')&&voice==='active'&&!entry.ur.includes(forWhomUr[i]))issues.push('Urdu modal case agreement: '+i+'/'+condition);
