@@ -92,6 +92,7 @@ const aspects=['simple','continuous','perfect','perfectContinuous'];
 const aspectName={simple:'سادہ',continuous:'جاری',perfect:'مکمل',perfectContinuous:'مکمل جاری'};
 const tenseNames={past:'ماضی',present:'حال',future:'مستقبل'};
 const pUr=['میں','تم','تم','وہ','وہ','ہم','تم سب','وہ سب'];
+const conditionalUr=['کروں','کرو','کرو','کرے','کرے','کریں','کرو','کریں'];
 const wishPast=['يَا لَيْتِنِي','يَا لَيْتَك','يَا لَيْتِك','يَا لَيْتَه','يَا لَيْتَهَا','يَا لَيْتِنَا','يَا لَيْتَكُمْ','يَا لَيْتَهُمْ'];
 const notProgressive=['مَانِي','مَانْتَ','مَانْتِي','مَاهُو','مَاهِي','مَانَّا','مَانْتُوا','مَاهُمْ'];
 const canPastUr=['سکا','سکے','سکی','سکا','سکی','سکے','سکے','سکے'];
@@ -196,7 +197,7 @@ function sentence(i,t,a,v,c){
    }else{
     const action=isA?`${pa} الشُّغْل`:'الشُّغْل خَلَص';
     ar=`إِذَا ${action} ${t==='future'?'بُكْرَة':'الْحِين'}، ${isA?'بْيِكُون أَحْسَن':'بِنْرْتَاح'}`;
-    ur=`اگر ${isA?p+' کام مکمل کرے':'کام مکمل ہو جائے'} تو ${result}`;
+    ur=`اگر ${isA?p+' کام مکمل '+conditionalUr[i]:'کام مکمل ہو جائے'} تو ${result}`;
    }
    return {ar,ur,kind,note:'روزمرہ نجدی میں مستقبل کی حقیقی شرط کے بعد بھی ماضی کی فعلی صورت (مثلاً إذا خلصت) آ سکتی ہے؛ یہ معنی میں مستقبل ہی ہے۔ جاری/مدتی معنی اس مختصر شرط میں نہیں آتے۔'};
  }
@@ -293,6 +294,7 @@ function auditExamples(){
   if(/undefined|null|\\$\\{/.test(entry.ar+' '+entry.ur))issues.push('Broken placeholder: '+[i,condition,voice,aspect,tense].join('/'));
   if(condition==='ابھی تک نہیں'&&tense==='future'&&voice==='active'&&(!entry.ar.includes(past[i])||!entry.ar.includes('لِلْحِين مَا')))issues.push('Future not-yet-completed agreement: '+i);
   if(condition==='خواہش'&&tense==='past'&&voice==='active'&&!entry.ar.startsWith(wishPast[i]+' '))issues.push('Past wish pronoun agreement: '+i);
+  if(condition==='شرط'&&tense!=='past'&&voice==='active'&&!entry.ur.includes(pUr[i]+' کام مکمل '+conditionalUr[i]))issues.push('Conditional Urdu agreement: '+i);
   if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&!entry.ur.endsWith(wantUr[i]))issues.push('Desire Urdu agreement: '+i);
   if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&(!entry.ar.includes(present[i])||entry.ar.includes(future[i])))issues.push('Desire complement form: '+i);
   if(condition==='استطاعت'&&voice==='active'&&!entry.ar.includes(present[i]))issues.push('Ability verb agreement: '+i);
