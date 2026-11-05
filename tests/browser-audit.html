@@ -14,7 +14,7 @@ frame.src='../index.html?audit='+Date.now();
 const check=(ok,message)=>{if(!ok)throw Error(message);};
 function select(el,value){el.value=value;el.dispatchEvent(new Event('change'));}
 run.onclick=async()=>{
- run.disabled=true;
+ run.disabled=voice.disabled=true;
  const w=frame.contentWindow,d=frame.contentDocument,by=id=>d.getElementById(id);
  const person=by('person'),condition=by('condition'),panel=by('wordPanel');
  const previous=[person.value,condition.value,frame.style.width],lines=[];
@@ -78,7 +78,7 @@ run.onclick=async()=>{
  }catch(e){say('FAIL '+place+' — '+e.message);}
  finally{
   if(original)Object.defineProperty(w,'speechSynthesis',original);else delete w.speechSynthesis;
-  w.SpeechSynthesisUtterance=Utterance;frame.style.width=previous[2];select(person,previous[0]);select(condition,previous[1]);run.disabled=false;
+  w.SpeechSynthesisUtterance=Utterance;frame.style.width=previous[2];select(person,previous[0]);select(condition,previous[1]);run.disabled=voice.disabled=false;
  }
 };
 voice.onclick=()=>{
