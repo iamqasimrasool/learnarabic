@@ -25,6 +25,19 @@ run.onclick=async()=>{
  // Use plain utterances so the test voice can be selected without an OS voice.
  const Utterance=w.SpeechSynthesisUtterance;
  try{
+  select(condition,'مثبت');
+  for(const scope of ['active','nonagent'])for(const tense of ['past','present','future'])for(const aspect of ['simple','continuous','perfect','perfectContinuous']){
+   select(by('scope'),scope);select(by('tense'),tense);select(by('aspect'),aspect);
+   const rows=by('rows').rows,head=by('headings').lastElementChild;
+   check(rows.length===1&&rows[0].querySelector('.voice-label')&&rows[0].querySelectorAll('.tense-cell').length===1,'Combined filter shape');
+   check(rows[0].querySelector('.tense-cell').dataset.tense===head.textContent&&rows[0].querySelector('.copy-btn'),'Tense header and copy control');
+  }
+  const first=by('rows').rows[0];first.querySelector('.word-tap').click();check(!panel.hidden,'Open word');
+  by('wordMeaning').click();check(!panel.hidden,'Keep open on inside click');
+  first.querySelector('.translation').click();check(panel.hidden,'Dismiss outside');
+  first.querySelector('.grammar-trigger').click();check(!panel.hidden,'Open grammar');by('close').click();
+  select(by('tense'),'all');select(by('aspect'),'all');
+  say('PASS 24 combined filters, phrase copy controls and outside-click dismissal');
   select(by('scope'),'nonagent');select(by('detail'),'compact');select(condition,'مجبوری');
   check(person.disabled&&by('rows').rows.length===1,'Shared obligation row');
   select(condition,'احتمال');check(by('rows').rows.length===4,'Four probability aspects');
