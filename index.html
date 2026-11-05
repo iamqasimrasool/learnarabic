@@ -92,6 +92,7 @@ const aspects=['simple','continuous','perfect','perfectContinuous'];
 const aspectName={simple:'سادہ',continuous:'جاری',perfect:'مکمل',perfectContinuous:'مکمل جاری'};
 const tenseNames={past:'ماضی',present:'حال',future:'مستقبل'};
 const pUr=['میں','تم','تم','وہ','وہ','ہم','تم سب','وہ سب'];
+const wishPast=['يَا لَيْتِنِي','يَا لَيْتَك','يَا لَيْتِك','يَا لَيْتَه','يَا لَيْتَهَا','يَا لَيْتِنَا','يَا لَيْتَكُمْ','يَا لَيْتَهُمْ'];
 const wantUr=['چاہتا ہوں','چاہتے ہو','چاہتی ہو','چاہتا ہے','چاہتی ہے','چاہتے ہیں','چاہتے ہو','چاہتے ہیں'];
 const simpleNowUr=['کرتا ہوں','کرتے ہو','کرتی ہو','کرتا ہے','کرتی ہے','کرتے ہیں','کرتے ہو','کرتے ہیں'];
 const simpleFutureUr=['کروں گا','کرو گے','کرو گی','کرے گا','کرے گی','کریں گے','کرو گے','کریں گے'];
@@ -193,7 +194,7 @@ function sentence(i,t,a,v,c){
  }
  if(c==='خواہش'){
    if(isA){
-    if(t==='past'){ar=`يَا لَيْت ${persons[i][0]} ${pa} الشُّغْل بَدْرِي`;ur=`کاش ${p} نے کام پہلے مکمل کیا ہوتا`;}
+    if(t==='past'){ar=`${wishPast[i]} ${pa} الشُّغْل بَدْرِي`;ur=`کاش ${p} نے کام پہلے مکمل کیا ہوتا`;}
     else {const want=['أَبِي','تَبِي','تَبِين','يَبِي','تَبِي','نَبِي','تَبُون','يَبُون'];ar=`${want[i]} ${pr} الشُّغْل ${t==='future'?'بُكْرَة':'الْحِين'}`;ur=`${p} ${t==='future'?'کل':'ابھی'} کام مکمل کرنا ${wantUr[i]}`;}
    }else{
     ar=t==='past'?'يَا لَيْت الشُّغْل خَلَص بَدْرِي':t==='present'?'وِدِّي الشُّغْل يِخْلَص الْحِين':'وِدِّي الشُّغْل يِخْلَص بُكْرَة';
@@ -285,6 +286,8 @@ function auditExamples(){
   if(!entry||typeof entry.ar!=='string'||!entry.ar.trim()||typeof entry.ur!=='string'||!entry.ur.trim())issues.push('Empty example: '+[i,condition,voice,aspect,tense].join('/'));
   if(/undefined|null|\\$\\{/.test(entry.ar+' '+entry.ur))issues.push('Broken placeholder: '+[i,condition,voice,aspect,tense].join('/'));
   if(condition==='ابھی تک نہیں'&&tense==='future'&&voice==='active'&&!entry.ar.includes(past[i]))issues.push('Future completion agreement: '+i);
+  if(condition==='خواہش'&&tense==='past'&&voice==='active'&&!entry.ar.startsWith(wishPast[i]+' '))issues.push('Past wish pronoun agreement: '+i);
+  if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&!entry.ur.endsWith(wantUr[i]))issues.push('Desire Urdu agreement: '+i);
  }
  return {checked,issues,passed:issues.length===0};
 }
