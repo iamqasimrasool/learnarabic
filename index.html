@@ -94,8 +94,8 @@ const tenseNames={past:'ماضی',present:'حال',future:'مستقبل'};
 const pUr=['میں','تم','تم','وہ','وہ','ہم','تم سب','وہ سب'];
 const wishPast=['يَا لَيْتِنِي','يَا لَيْتَك','يَا لَيْتِك','يَا لَيْتَه','يَا لَيْتَهَا','يَا لَيْتِنَا','يَا لَيْتَكُمْ','يَا لَيْتَهُمْ'];
 const notProgressive=['مَانِي','مَانْتَ','مَانْتِي','مَاهُو','مَاهِي','مَانَّا','مَانْتُوا','مَاهُمْ'];
-const canPastUr=['سکا','سکے','سکیں','سکا','سکی','سکے','سکے','سکے'];
-// Urdu respectful/plural agreement may differ by context; second-person feminine is expressed with «سکیں» in this set.
+const canPastUr=['سکا','سکے','سکی','سکا','سکی','سکے','سکے','سکے'];
+// Urdu second-person singular feminine takes «سکی»; respectful forms may differ by context.
 const canNowUr=['سکتا ہوں','سکتے ہو','سکتی ہو','سکتا ہے','سکتی ہے','سکتے ہیں','سکتے ہو','سکتے ہیں'];
 const canFutureUr=['سکوں گا','سکو گے','سکو گی','سکے گا','سکے گی','سکیں گے','سکو گے','سکیں گے'];
 const wantUr=['چاہتا ہوں','چاہتے ہو','چاہتی ہو','چاہتا ہے','چاہتی ہے','چاہتے ہیں','چاہتے ہو','چاہتے ہیں'];
@@ -104,7 +104,7 @@ const simpleFutureUr=['کروں گا','کرو گے','کرو گی','کرے گا',
 const simpleFutureNegUr=['نہیں کروں گا','نہیں کرو گے','نہیں کرو گی','نہیں کرے گا','نہیں کرے گی','نہیں کریں گے','نہیں کرو گے','نہیں کریں گے'];
 const simpleNowNegUr=['نہیں کرتا ہوں','نہیں کرتے ہو','نہیں کرتی ہو','نہیں کرتا ہے','نہیں کرتی ہے','نہیں کرتے ہیں','نہیں کرتے ہو','نہیں کرتے ہیں'];
 const prog=['رہا ہوں','رہے ہو','رہی ہو','رہا ہے','رہی ہے','رہے ہیں','رہے ہو','رہے ہیں'];
-const busyPastUr=['مصروف تھا','مصروف تھے','مصروف تھیں','مصروف تھا','مصروف تھی','مصروف تھے','مصروف تھے','مصروف تھے'];
+const busyPastUr=['مصروف تھا','مصروف تھے','مصروف تھی','مصروف تھا','مصروف تھی','مصروف تھے','مصروف تھے','مصروف تھے'];
 const busyNowUr=['مصروف ہوں','مصروف ہو','مصروف ہو','مصروف ہے','مصروف ہے','مصروف ہیں','مصروف ہو','مصروف ہیں'];
 const busyFutureUr=['مصروف ہوں گا','مصروف ہوگے','مصروف ہوگی','مصروف ہوگا','مصروف ہوگی','مصروف ہوں گے','مصروف ہوگے','مصروف ہوں گے'];
 const progPast=['رہا تھا','رہے تھے','رہی تھی','رہا تھا','رہی تھی','رہے تھے','رہے تھے','رہے تھے'];
@@ -304,6 +304,7 @@ function auditExamples(){
   if(condition==='نفی'&&aspect==='simple'&&voice==='active'&&tense==='future'&&!entry.ar.includes(futureNeg[i]))issues.push('Negative future agreement: '+i);
   if(condition==='نفی'&&voice==='active'&&aspect==='continuous'&&tense==='present'&&!entry.ar.startsWith(notProgressive[i]+' '))issues.push('Negative progressive agreement: '+i);
   if(condition==='استطاعت'&&voice==='active'&&!entry.ur.endsWith(tense==='past'?canPastUr[i]:tense==='future'?canFutureUr[i]:canNowUr[i]))issues.push('Ability Urdu agreement: '+i);
+  if(condition==='استطاعت'&&voice==='active'&&tense==='past'&&i===2&&entry.ur.endsWith('سکے'))issues.push('Feminine past ability must use سکی');
  }
  return {checked,issues,passed:issues.length===0};
 }
