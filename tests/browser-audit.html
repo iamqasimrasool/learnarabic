@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Learn Arabic browser audit</title>
+<style>body{font:16px system-ui;margin:20px}pre{white-space:pre-wrap}iframe{height:600px;border:0}</style>
+<h1>Learn Arabic browser audit</h1>
+<button id="run" disabled>Run checks</button> <button id="voice" disabled>Test Arabic audio on this device</button>
+<pre id="report" role="status">Loading examples…</pre><p id="audio"></p>
+<iframe id="site" src="../index.html" title="Page under test"></iframe>
+<script>
+const frame=document.querySelector('iframe'), run=document.querySelector('#run'), voice=document.querySelector('#voice');
+const report=document.querySelector('#report'),audio=document.querySelector('#audio');
+frame.onload=()=>{run.disabled=voice.disabled=false;report.textContent='Ready';};
+const check=(ok,message)=>{if(!ok)throw Error(message);};
+function select(el,value){el.value=value;el.dispatchEvent(new Event('change'));}
+run.onclick=async()=>{
+ run.disabled=true;
+ const w=frame.contentWindow,d=frame.contentDocument,by=id=>d.getElementById(id);
+ const person=by('person'),condition=by('condition'),panel=by('wordPanel');
+ const previous=[person.value,condition.value,frame.style.width],lines=[];
+ let cells=0,words=0,filters=0,last,place='startup';
+ const say=line=>{lines.push(line);report.textContent=lines.join('\n');};
+ const original=Object.getOwnPropertyDescriptor(w,'speechSynthesis');
+ const mock={getVoices:()=>[{lang:'ar-SA'}],cancel(){},speak(u){last=u;}};
+ // Use plain utterances so the test voice can be selected without an OS voice.
+ const Utterance=w.SpeechSynthesisUtterance;
+ try{
+  const audit=w.auditNajdiExamples();
+  check(audit.checked===2304&&audit.passed,JSON.stringify(audit));say('PASS 2,304 generated entries and grammar regressions');
+  Object.defineProperty(w,'speechSynthesis',{configurable:true,value:mock});
+  w.SpeechSynthesisUtterance=class{constructor(text){this.text=text;}};
+  for(const p of person.options){
+   select(person,p.value);
+   for(const c of condition.options){
+    place=p.text+' / '+c.text;
+    select(condition,c.value);filters++;
+    const all=c.value==='all',rows=[...by('rows').rows];
+    check(rows.length===(all?96:8),'Row count');
+    check(by('rows').querySelectorAll('.kind').length===(all?12:1),'Condition column');
+    for(const row of rows){
+     check(all||row.dataset.condition===c.value,'Unexpected condition');
+     const examples=row.querySelectorAll('.tense-cell');
+     check(examples.length===3,'Missing time');if(all)continue;
+     for(const td of examples){
+      const ar=td.querySelector('.arabic').textContent,ur=td.querySelector('.translation').textContent;
+      check(ar&&ur&&!/(?:وہ(?: سب)? نے|undefined|null)/u.test(ur),'Translation');
+      for(const word of td.querySelectorAll('.word-tap')){
+       word.click();words++;
+       check(!panel.hidden&&by('wordTitle').textContent===word.textContent.replace(/[،؟]/gu,'')&&by('wordMeaning').textContent&&!by('wordMeaning').textContent.includes('مزید تصدیق')&&by('wordGrammar').textContent&&by('wordSentence').textContent===ar&&by('wordSentenceUr').textContent===ur,'Word explanation');
+      }
+      const [listen,why]=td.querySelectorAll('.speak-btn');why.click();
+      check(!panel.hidden&&by('wordGrammar').textContent&&by('wordSentenceUr').textContent===ur,'Grammar panel');
+      by('close').click();check(panel.hidden,'Close');
+      last=null;listen.click();check(last?.text===ar&&last.lang==='ar-SA'&&last.voice.lang==='ar-SA','Audio text / voice');cells++;
+     }
+    }
+   }
+   await new Promise(resolve=>setTimeout(resolve,0));
+  }
+  check(filters===104&&cells===2304,'Incomplete matrix');
+  say('PASS '+filters+' filter combinations; '+cells+' sentence, grammar and audio-button checks; '+words+' word clicks');
+  for(const width of [320,375,390,430,600,700,768,1024,1440]){
+   place='layout '+width;frame.style.width=width+'px';
+   await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+   const row=by('rows').rows[0],box=row.querySelector('.tense-cell').getBoundingClientRect();
+   check(d.documentElement.scrollWidth<=w.innerWidth+1,'Page overflows');
+   if(width<=700)check(box.left>=0&&box.right<=width&&getComputedStyle(row).display==='grid','Mobile card');
+   if(width<=600)check(Math.abs(box.top-row.querySelectorAll('.tense-cell')[1].getBoundingClientRect().top)>10,'Times not stacked');
+   row.querySelector('.word-tap').click();const popup=panel.getBoundingClientRect();
+   check(popup.left>=0&&popup.right<=width&&popup.top>=0&&popup.bottom<=w.innerHeight,'Popup clipped');
+   by('close').click();say('PASS layout '+width+' px');
+  }
+  say('PASS all automated checks. Audio routing was simulated. Use the separate device audio test to check playback.');
+ }catch(e){say('FAIL '+place+' — '+e.message);}
+ finally{
+  if(original)Object.defineProperty(w,'speechSynthesis',original);else delete w.speechSynthesis;
+  w.SpeechSynthesisUtterance=Utterance;frame.style.width=previous[2];select(person,previous[0]);select(condition,previous[1]);run.disabled=false;
+ }
+};
+voice.onclick=()=>{
+ const w=frame.contentWindow,synth=w.speechSynthesis;
+ if(!synth||!w.SpeechSynthesisUtterance){audio.textContent='Device has no speech synthesis API.';return;}
+ const voices=synth.getVoices(),v=voices.find(v=>/^ar-SA$/i.test(v.lang))||voices.find(v=>/^ar/i.test(v.lang));
+ const u=new w.SpeechSynthesisUtterance('خَلَّصْت الشُّغْل أَمْس');u.lang='ar-SA';if(v)u.voice=v;
+ audio.textContent='Playback requested. Arabic voice: '+(v?.name||'system default');
+ u.onend=()=>{audio.textContent='Device reported completed playback. Voice: '+(v?.name||'system default');};
+ u.onerror=e=>{audio.textContent='Playback failed: '+e.error;};synth.speak(u);
+};
+</script></html>
