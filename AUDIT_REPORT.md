@@ -1,29 +1,44 @@
-# Learn Arabic — Full Matrix Audit (2026-11-05)
+# Learn Arabic — جانچ رپورٹ، 5 نومبر 2026
 
-## Scope
-Single-page Riyadh/Najdi Arabic teaching application, index.html.
-8 persons × 12 conditions × 2 constructions × 4 aspects × 3 tenses = **2,304 generated examples**.
+جانچ کا ورژن [078bd46](https://github.com/iamqasimrasool/learnarabic/commit/078bd46aa17bdcddab4799c17255e374ba4fc357)۔ جدول میں 8 ضمیر × 12 حالتیں × 2 ساختیں × 4 کیفیات × 3 زمانے = **2,304 خانے** ہیں۔ ان میں **507 مختلف عربی عبارتیں** ہیں (اعراب اور سوالیہ علامت سمیت)۔ فاعل غیر متعین ہو یا کسی حالت میں چاروں کیفیات کے لیے ایک ہی فطری عبارت استعمال ہو تو جملہ دہرایا جاتا ہے۔
 
-## Executed checks
-1. **JavaScript compilation and initialization:** inline script compiled and executed with a mocked DOM, no initialization errors.
-2. **Complete generator audit:** window.auditNajdiExamples() executed on all 2,304 examples; **0 issues** reported after corrections.
-3. **Semantic regression checks across the complete matrix:** Urdu pronoun oblique-case agreement, ability/desire/permission/probability conjugations, conditional markers and outcomes, future not-yet completion, negative-duration gender agreement, and tense-specific time expressions.
-4. **Render smoke tests:** all 8 persons × 13 condition selector values (all + 12 individual conditions) = **104 render invocations**, no exceptions with a simulated DOM.
-5. **UI event wiring:** person, condition, language, and close handlers registered.
+## زبان اور تدریسی مواد
 
-## Corrections made during this audit
-- Fixed ungrammatical Urdu modal phrases such as “تم کے لیے” → “تمہارے لیے”, including all eight persons.
-- Fixed Urdu probability agreement such as “شاید تم ... کرے” → “شاید تم ... کرو”.
-- Distinguished past “گزشتہ روز” from future “کل” in modal translations.
-- Added regression checks for these classes of errors.
+| حالت | جانچے گئے خانے | اسی حالت میں الگ عربی عبارتیں |
+|---|---:|---:|
+| مثبت | 192 | 103 |
+| نفی | 192 | 103 |
+| سوال | 192 | 103 |
+| شرط | 192 | 27 |
+| خواہش | 192 | 25 |
+| استطاعت | 192 | 25 |
+| مجبوری | 192 | 24 |
+| اجازت | 192 | 27 |
+| احتمال | 192 | 27 |
+| ابھی تک نہیں | 192 | 25 |
+| عمل جاری | 192 | 27 |
+| پہلے ہی | 192 | 25 |
 
-## Not yet verified
-- **Actual mobile/browser layout and tap behavior** (mock DOM is not a browser).
-- **Arabic speech playback**, device voice availability, audio pronunciation, or speech-synthesis engine behavior.
-- **Native Najdi speaker review** of all generated combinations. Automated checks cannot certify that all 2,304 sentences sound natural.
-- **GitHub Pages deployment** after the latest commits.
+پہلے اور آخری ورژن کے ایک ہی خانوں کا موازنہ کرنے پر **160** کی عربی اور **241** کا اردو ترجمہ بدلا۔ دونوں کو ملا کر **293 الگ خانے** تبدیل ہوئے۔ رنگ، لفظی وضاحت اور لے آؤٹ کی تبدیلیاں اس گنتی سے الگ ہیں۔
 
-## Important pedagogical caveat
-The four English-style aspects do not always map to distinct natural Najdi constructions. Some generated cells intentionally collapse into the same everyday phrasing. “Nonagent” includes resultative forms and unspecified-agent active clauses; it is not a formal passive-voice paradigm.
+- «وہ نے» اور «وہ سب نے» کی جگہ «اس نے» اور «ان سب نے» آئے۔ کامل نفی میں اب مقررہ وقت تک کام ادھورا ہونے کا مفہوم ہے۔ منفی مدت والے جملوں میں ایک یا دو گھنٹے پورے نہ ہونے کی بات برقرار ہے۔
+- «خَلَّص» پر تشدید فعل کا معنی بدلتی ہے۔ لفظی وضاحت میں «اس نے مکمل کیا» اور «خَلَص» کے لیے «مکمل ہو گیا» الگ دکھائے جاتے ہیں۔
+- «بْتْخَلِّصِين» میں مستقبل کا سابقہ نارنجی، مخاطب کی علامتیں سبز اور فعل کا مادہ نیلا ہے۔ «لَوْ» اور «إِذَا» جامنی ہیں۔ اعراب اپنے حرف کے ساتھ رہتے ہیں۔
+- ڈیسک ٹاپ جدول میں ایک حالت آٹھ قطاروں پر ایک ہی بار دکھائی جاتی ہے۔ موبائل پر لفظی وضاحت اسکرین کے اندر کھلتی ہے۔ فلٹر بدلنے پر پرانے جملے کی وضاحت بند ہو جاتی ہے۔
 
-Status: **Automated structural and selected semantic checks passed; human linguistic and real-device testing outstanding.**
+## عملی ٹیسٹ
+
+| ٹیسٹ | نتیجہ |
+|---|---|
+| مکمل جدول اور گرامر کے متعین قواعد | پاس۔ 2,304 خانے، خالی فیلڈ، صیغہ، وقت، شرط اور اردو کی متعین غلطیوں سمیت۔ |
+| Chrome میں ضمیر اور حالت کے فلٹر | پاس۔ 104 انتخاب۔ ہر الگ حالت میں 8 قطاریں، تمام حالتوں میں 96۔ ہر قطار میں 3 زمانے۔ |
+| لفظی وضاحت اور گرامر | پاس۔ 11,408 لفظی کلک اور 2,304 گرامر بٹن۔ متعلقہ لفظ، جملہ، ترجمہ اور وضاحت کی موجودگی جانچی گئی۔ |
+| موبائل، ٹیبلٹ اور ڈیسک ٹاپ | پاس۔ 320، 375، 390، 430، 600، 700، 768، 1024 اور 1440 پکسل کی براؤزر چوڑائیوں پر صفحہ اور کھلی وضاحت کی حدود جانچی گئیں۔ |
+| آڈیو بٹن | پاس۔ مصنوعی صوتی انجن کے ساتھ 2,304 بٹنوں سے اسی خانے کا عربی متن اور سعودی عربی آواز کا انتخاب ملا۔ آواز کی خرابی اور منسوخی کے الگ رویے بھی جانچے گئے۔ |
+| حقیقی آڈیو پلے بیک | فیل، اس ٹیسٹ براؤزر میں۔ اصل انجن نے عربی آواز مہیا نہیں کی اور نمونے پر `synthesis-failed` واپس کیا۔ |
+
+## باقی تصدیق
+
+اصل iPhone/Safari اور Android پر عربی آواز سننا، اور نجدی تلفظ و جملوں کی فطری ادائیگی مقامی بولنے والے سے جانچنا باقی ہے۔ اردو تراجم اور عربی عبارتوں کے قواعد اور مشترکہ سانچوں کا جائزہ لیا گیا۔ ہر الگ عبارت کی آزاد انسانی لسانی توثیق باقی ہے۔ دوسری ساخت میں کام کا نتیجہ اور غیر متعین لوگوں کا فعل دونوں شامل ہیں۔ رسمی مجہول کی الگ گردان اس جدول میں موجود نہیں۔
+
+[براؤزر ٹیسٹ دوبارہ چلائیں](https://iamqasimrasool.github.io/learnarabic/tests/browser-audit.html)۔ **Run checks** تمام فلٹرز، بٹن اور اسکرین کی چوڑائیاں آزماتا ہے۔ **Test Arabic audio on this device** اسی آلے کا اصل صوتی انجن آزماتا ہے۔
