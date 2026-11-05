@@ -93,6 +93,9 @@ const aspectName={simple:'سادہ',continuous:'جاری',perfect:'مکمل',per
 const tenseNames={past:'ماضی',present:'حال',future:'مستقبل'};
 const pUr=['میں','تم','تم','وہ','وہ','ہم','تم سب','وہ سب'];
 const wishPast=['يَا لَيْتِنِي','يَا لَيْتَك','يَا لَيْتِك','يَا لَيْتَه','يَا لَيْتَهَا','يَا لَيْتِنَا','يَا لَيْتَكُمْ','يَا لَيْتَهُمْ'];
+const canPastUr=['سکا','سکے','سکیں','سکا','سکی','سکے','سکے','سکے'];
+const canNowUr=['سکتا ہوں','سکتے ہو','سکتی ہو','سکتا ہے','سکتی ہے','سکتے ہیں','سکتے ہو','سکتے ہیں'];
+const canFutureUr=['سکوں گا','سکو گے','سکو گی','سکے گا','سکے گی','سکیں گے','سکو گے','سکیں گے'];
 const wantUr=['چاہتا ہوں','چاہتے ہو','چاہتی ہو','چاہتا ہے','چاہتی ہے','چاہتے ہیں','چاہتے ہو','چاہتے ہیں'];
 const simpleNowUr=['کرتا ہوں','کرتے ہو','کرتی ہو','کرتا ہے','کرتی ہے','کرتے ہیں','کرتے ہو','کرتے ہیں'];
 const simpleFutureUr=['کروں گا','کرو گے','کرو گی','کرے گا','کرے گی','کریں گے','کرو گے','کریں گے'];
@@ -204,10 +207,8 @@ function sentence(i,t,a,v,c){
  }
  if(c==='استطاعت'){
    if(isA){
-    ar=t==='past'?`${capacityPast[i]} أَخَلِّص الشُّغْل أَمْس`:t==='present'?`${capacityNow[i]} أَخَلِّص الشُّغْل الْحِين`:`بُكْرَة ${capacityNow[i]} أَخَلِّص الشُّغْل`;
-    // modal complement must agree with selected pronoun
-    ar=ar.replace('أَخَلِّص الشُّغْل',`${pr} الشُّغْل`);
-    ur=`${p} ${t==='past'?'کل کام مکمل کر سکا/سکی/سکے':t==='future'?'کل کام مکمل کر سکے گا/گی/گے':'ابھی کام مکمل کر سکتا/سکتی/سکتے ہے/ہیں'}`;
+    ar=t==='past'?`${capacityPast[i]} ${pr} الشُّغْل أَمْس`:t==='present'?`${capacityNow[i]} ${pr} الشُّغْل الْحِين`:`بُكْرَة ${capacityNow[i]} ${pr} الشُّغْل`;
+    ur=`${p} ${t==='past'?'کل':t==='future'?'کل':'ابھی'} کام مکمل کر ${t==='past'?canPastUr[i]:t==='future'?canFutureUr[i]:canNowUr[i]}`;
    }else{
     ar=t==='past'?'قَدَرُوا يِخَلِّصُون الشُّغْل أَمْس':t==='present'?'يِقْدَرُون يِخَلِّصُون الشُّغْل الْحِين':'بُكْرَة بْيِقْدَرُون يِخَلِّصُون الشُّغْل';
     ur=t==='past'?'لوگ کل کام مکمل کر سکے':t==='present'?'لوگ ابھی کام مکمل کر سکتے ہیں':'لوگ کل کام مکمل کر سکیں گے';kind='فاعل غیر متعین (معلوم)';
@@ -288,6 +289,8 @@ function auditExamples(){
   if(condition==='ابھی تک نہیں'&&tense==='future'&&voice==='active'&&!entry.ar.includes(past[i]))issues.push('Future completion agreement: '+i);
   if(condition==='خواہش'&&tense==='past'&&voice==='active'&&!entry.ar.startsWith(wishPast[i]+' '))issues.push('Past wish pronoun agreement: '+i);
   if(condition==='خواہش'&&tense!=='past'&&voice==='active'&&!entry.ur.endsWith(wantUr[i]))issues.push('Desire Urdu agreement: '+i);
+  if(condition==='استطاعت'&&voice==='active'&&!entry.ar.includes(present[i]))issues.push('Ability verb agreement: '+i);
+  if(condition==='استطاعت'&&voice==='active'&&!entry.ur.endsWith(tense==='past'?canPastUr[i]:tense==='future'?canFutureUr[i]:canNowUr[i]))issues.push('Ability Urdu agreement: '+i);
  }
  return {checked,issues,passed:issues.length===0};
 }
